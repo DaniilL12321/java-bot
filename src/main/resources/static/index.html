@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jokes API Client</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #555;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #777;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #addJokeResult {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Jokes API Client</h1>
+
+<h2>Получить все шутки</h2>
+<button id="allJokesButton" onclick="toggleJokesVisibility()">Получить все шутки</button>
+<div id="allJokesResult"></div>
+
+<h2>Получить шутку по ID</h2>
+<label for="jokeId">ID шутки:</label>
+<input type="text" id="jokeId" placeholder="Введите ID шутки">
+<button onclick="getJokeById()">Получить шутку</button>
+<div id="singleJokeResult"></div>
+
+<h2>Получить рандомную шутку</h2>
+<button onclick="getRandomJoke()">Рандомная шутка!</button>
+<div id="randomJokeResult"></div>
+
+<h2>Добавить новую шутку</h2>
+<label for="newJoke">Новая шутка:</label>
+<textarea id="newJoke" placeholder="Введите новую шутку"></textarea>
+<button onclick="addNewJoke()">Добавить новую шутку</button>
+<div id="addJokeResult"></div>
+
+<h2>Обновить шутку по ID</h2>
+<label for="updateJokeId">ID шутки:</label>
+<input type="text" id="updateJokeId" placeholder="Введите ID шутки">
+<label for="updatedJoke">Обновленная шутка:</label>
+<textarea id="updatedJoke" placeholder="Введите обновленную шутку"></textarea>
+<button onclick="updateJokeById()">Обновить шутку</button>
+<div id="updateJokeResult"></div>
+
+<h2>Удалить шутку по ID</h2>
+<label for="deleteJokeId">ID шутки:</label>
+<input type="text" id="deleteJokeId" placeholder="Введите ID шутки">
+<button onclick="deleteJokeById()">Удалить шутку</button>
+<div id="deleteJokeResult"></div>
+
+<script>
+    function sendRequest(method, url, data, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                callback(xhr.status, xhr.responseText);
+            }
+        };
+        xhr.send(data);
+    }
+
+    function addNewJoke() {
+        const newJokeInput = document.getElementById('newJoke');
+        const newJoke = newJokeInput.value.trim(); // Убираю пробелы в начале и конце строки
+        const resultDiv = document.getElementById('addJokeResult');
+
+        // Проверка на пустое сообщение
+        if (newJoke === '') {
+            resultDiv.innerHTML = 'Пожалуйста, введите шутку перед добавлением.';
+            return;
+        }
+        sendRequest('POST', '/jokes', JSON.stringify({ shutka: newJoke }), function (status, responseText) {
+            const resultDiv = document.getElementById('addJokeResult');
+            resultDiv.innerHTML = '';
+
+            if (status === 201) {
+                const responseData = JSON.parse(responseText);
+                resultDiv.innerHTML = `Шутка с ID ${responseData.id} добавлена.<br>Дата создания: ${responseData.timeCreated}`;
+            } else {
+                resultDiv.innerHTML = 'Произошла ошибка при добавлении шутки.';
+            }
+        });
+    }
+
+    let isJokesFetched = false;
+
+    function toggleJokesVisibility() {
+        const allJokesButton = document.getElementById('allJokesButton');
+        const allJokesResult = document.getElementById('allJokesResult');
+
+        if (!isJokesFetched) {
+            sendRequest('GET', '/jokes', null, function (status, responseText) {
+                if (status === 200) {
+                    const responseData = JSON.parse(responseText);
+
+                    if (responseData.length > 0) {
+                        const jokesHTML = responseData.map(joke => {
+                            return `<div>
+                                        <strong>ID:</strong> ${joke.id}<br>
+                                        <strong>Шутка:</strong> <pre>${joke.shutka}</pre>
+                                        <strong>Дата создания:</strong> ${joke.timeCreated}
+                                    </div><hr>`;
+                        }).join('');
+
+                        allJokesResult.innerHTML = jokesHTML;
+                        allJokesButton.textContent = 'Скрыть';
+                    } else {
+                        allJokesResult.innerHTML = 'Шуток пока нет.';
+                    }
+                } else {
+                    allJokesResult.innerHTML = 'Произошла ошибка при получении шуток.';
+                }
+
+                isJokesFetched = true;
+            });
+        } else {
+            const isVisible = allJokesResult.style.display !== 'none';
+            allJokesResult.style.display = isVisible ? 'none' : 'block';
+            allJokesButton.textContent = isVisible ? 'Получить все шутки' : 'Скрыть';
+        }
+    }
+
+    function getJokeById() {
+        const jokeId = document.getElementById('jokeId').value;
+        sendRequest('GET', '/jokes/' + jokeId, null, function (status, responseText) {
+            const singleJokeResult = document.getElementById('singleJokeResult');
+            singleJokeResult.innerHTML = ''; // Очищаем предыдущий результат
+
+            if (status === 200) {
+                const responseData = JSON.parse(responseText);
+
+                const jokeHTML =
+                    `<div>
+                        <strong>ID:</strong> ${responseData.id}<br>
+                        <strong>Шутка:</strong> <pre>${responseData.shutka}</pre>
+                        <strong>Дата создания:</strong> ${responseData.timeCreated}
+                    </div>`;
+
+
+                singleJokeResult.innerHTML = jokeHTML;
+            } else if (status === 404) {
+                singleJokeResult.innerHTML = 'Шутка с указанным ID не найдена.';
+            } else {
+                singleJokeResult.innerHTML = 'Произошла ошибка при получении шутки.';
+            }
+        });
+    }
+
+    function getRandomJoke() {
+        sendRequest('GET', '/jokes', null, function (status, responseText) {
+            const randomJokeResult = document.getElementById('randomJokeResult');
+            randomJokeResult.innerHTML = ''; // Очищаем предыдущий результат
+
+            if (status === 200) {
+                const responseData = JSON.parse(responseText);
+
+                if (responseData.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * responseData.length);
+                    const randomJoke = responseData[randomIndex];
+
+                    const jokeHTML =
+                        `<div>
+                        <strong>ID:</strong> ${randomJoke.id}<br>
+                        <strong>Шутка:</strong> <pre>${randomJoke.shutka}</pre>
+                        <strong>Дата создания:</strong> ${randomJoke.timeCreated}
+                    </div>`;
+
+
+                    randomJokeResult.innerHTML = jokeHTML;
+                } else {
+                    randomJokeResult.innerHTML = 'Нет доступных шуток для выбора.';
+                }
+            } else {
+                randomJokeResult.innerHTML = 'Произошла ошибка при получении рандомной шутки.';
+            }
+        });
+    }
+
+    function updateJokeById() {
+        const updateJokeId = document.getElementById('updateJokeId').value;
+        const updatedJoke = document.getElementById('updatedJoke').value;
+        const updateJokeResult = document.getElementById('updateJokeResult');
+
+        sendRequest('PUT', '/jokes/' + updateJokeId, JSON.stringify({ id: updateJokeId, shutka: updatedJoke }), function (status, responseText) {
+            if (status === 200) {
+                updateJokeResult.innerHTML = `<span style="color: green;">Шутка успешно обновлена!</span>`;
+            } else {
+                updateJokeResult.innerHTML = `<span style="color: red;">Ошибка при обновлении шутки: ${responseText}</span>`;
+            }
+        });
+    }
+
+    function deleteJokeById() {
+        const deleteJokeId = document.getElementById('deleteJokeId').value;
+        sendRequest('DELETE', '/jokes/' + deleteJokeId, null, function (status, responseText) {
+            document.getElementById('deleteJokeResult').innerHTML = responseText;
+        });
+    }
+</script>
+
+</body>
+</html>
