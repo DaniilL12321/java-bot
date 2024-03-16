@@ -3,6 +3,8 @@
 <img width="2032" alt="Снимок экрана 2024-03-14 в 20 54 53" src="https://github.com/DaniilL12321/java-bot/assets/126503938/0beb467e-115f-4437-b904-930ebfef25d6">
 
 В самом тг боте доступна только функция получения шутки
+<img width="492" alt="Снимок экрана 2024-03-16 в 11 54 11" src="https://github.com/DaniilL12321/java-bot/assets/126503938/1d7080de-f593-4c83-8427-4f2236d2d0f1">
+
 
 ### Структура базы данных:
 <img width="888" alt="Снимок экрана 2024-03-14 в 21 00 23" src="https://github.com/DaniilL12321/java-bot/assets/126503938/9a66f7c5-8264-4e5d-b401-d303fd8e69bc">
