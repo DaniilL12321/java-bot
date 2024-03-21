@@ -27,10 +27,7 @@ public class JokesServiceImpl implements JokesService{
     public Optional<Jokes> getJokesById(Long id) {
         return jokesRepository.findById(id);
     }
-    @Override
-    public List<Jokes> getAllJokes() {
-        return jokesRepository.getJokesBy();
-    }
+
     // Добавление новой шутки
     @Override
     public Optional<Jokes> addNewJoke(Jokes newJoke) {
@@ -47,17 +44,17 @@ public class JokesServiceImpl implements JokesService{
         }
     }
     // Изменение шутки
-    public Jokes updateJoke(Jokes updatedJoke) {
-        Optional<Jokes> existingJoke = jokesRepository.findById(updatedJoke.getId());
+    public Optional<Jokes> updateJoke(Long id, Jokes updatedJoke) {
+        Optional<Jokes> existingJoke = jokesRepository.findById(id);
 
         if (existingJoke.isPresent()) {
             Jokes jokeToUpdate = existingJoke.get();
             jokeToUpdate.setShutka(updatedJoke.getShutka());
             jokeToUpdate.setTimeUpdated(LocalDate.now());
 
-            return jokesRepository.save(jokeToUpdate);
+            return Optional.of(jokesRepository.save(jokeToUpdate));
         } else {
-            throw new NoSuchElementException("Шутка с ID " + updatedJoke.getId() + " не найдена");
+            return Optional.empty();
         }
     }
     public boolean existsJokesById(Long id) {

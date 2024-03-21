@@ -33,24 +33,12 @@ public class JokesController {
         return savedJoke.map(jokes -> ResponseEntity.status(HttpStatus.CREATED).body(jokes))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
-
     // PUT /jokes/id - изменение шутки
     @PutMapping("/{id}")
     public ResponseEntity<Jokes> updateJoke(@PathVariable Long id, @RequestBody Jokes updatedJoke) {
-        Optional<Jokes> existingJoke = service.getJokesById(id);
+        Optional<Jokes> savedJoke = service.updateJoke(id, updatedJoke);
 
-        if (existingJoke.isPresent()) {
-            Jokes jokeToUpdate = existingJoke.get();
-            jokeToUpdate.setShutka(updatedJoke.getShutka());
-            jokeToUpdate.setTimeUpdated(LocalDate.now());
-
-            Jokes savedJoke = service.updateJoke(jokeToUpdate);
-
-            return ResponseEntity.ok(savedJoke);
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        return savedJoke.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
     // DELETE /jokes/id - удаление шутки
     @DeleteMapping("/{id}")
