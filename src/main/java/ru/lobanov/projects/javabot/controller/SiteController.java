@@ -1,4 +1,4 @@
-package ru.lobanov.projects.javabot.Controller;
+package ru.lobanov.projects.javabot.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 

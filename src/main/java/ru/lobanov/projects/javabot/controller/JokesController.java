@@ -1,11 +1,11 @@
-package ru.lobanov.projects.javabot.Controller;
+package ru.lobanov.projects.javabot.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.lobanov.projects.javabot.Model.Jokes;
-import ru.lobanov.projects.javabot.Service.JokesService;
+import ru.lobanov.projects.javabot.model.Jokes;
+import ru.lobanov.projects.javabot.service.JokesService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,8 +18,8 @@ public class JokesController {
     private final JokesService service;
     // GET /jokes - выдача всех шуток
     @GetMapping
-    public List<Jokes> AllJokes() {
-        return service.AllJokes();
+    public List<Jokes> allJokes() {
+        return service.allJokes();
     }
     // GET /jokes/id - выдача шутки с определенном ID
     @GetMapping("/{id}")
@@ -28,11 +28,12 @@ public class JokesController {
     }
     // POST /jokes - создание новой шутки
     @PostMapping
-    public ResponseEntity<Jokes> addNewJoke(@RequestBody String json) {
-        Optional<Jokes> newJoke = service.addNewJoke(json);
-        return newJoke.map(jokes -> ResponseEntity.status(HttpStatus.CREATED).body(jokes))
-                      .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    public ResponseEntity<Jokes> addNewJoke(@RequestBody Jokes newJoke) {
+        Optional<Jokes> savedJoke = service.addNewJoke(newJoke);
+        return savedJoke.map(jokes -> ResponseEntity.status(HttpStatus.CREATED).body(jokes))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
+
     // PUT /jokes/id - изменение шутки
     @PutMapping("/{id}")
     public ResponseEntity<Jokes> updateJoke(@PathVariable Long id, @RequestBody Jokes updatedJoke) {

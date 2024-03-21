@@ -1,4 +1,4 @@
-package ru.lobanov.projects.javabot.Model;
+package ru.lobanov.projects.javabot.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor

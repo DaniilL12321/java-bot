@@ -1,4 +1,4 @@
-package ru.lobanov.projects.javabot.Config;
+package ru.lobanov.projects.javabot.config;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -8,7 +8,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.model.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import ru.lobanov.projects.javabot.Model.Jokes;
+import ru.lobanov.projects.javabot.model.Jokes;
 
 public class BotConfig {
     private final TelegramBot bot;

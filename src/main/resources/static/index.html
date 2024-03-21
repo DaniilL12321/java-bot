@@ -245,6 +245,11 @@
         const deleteJokeId = document.getElementById('deleteJokeId').value;
         sendRequest('DELETE', '/jokes/' + deleteJokeId, null, function (status, responseText) {
             document.getElementById('deleteJokeResult').innerHTML = responseText;
+            if (status === 204) {
+                deleteJokeResult.innerHTML = `<span style="color: green;">Шутка успешно удалена!</span>`;
+            } else {
+                deleteJokeResult.innerHTML = `<span style="color: red;">Ошибка при удалении шутки: ${responseText}</span>`;
+            }
         });
     }
 </script>
