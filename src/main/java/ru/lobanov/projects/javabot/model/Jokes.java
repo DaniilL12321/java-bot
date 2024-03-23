@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,8 +30,8 @@ public class Jokes {
     private String shutka;
 
     @Column(name = "time_created")
-    private LocalDate timeCreated;
+    private Date timeCreated;
 
     @Column(name = "time_updated")
-    private LocalDate timeUpdated;
+    private Date timeUpdated;
 }

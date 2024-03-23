@@ -54,7 +54,7 @@ public class BotConfig {
                 .replyMarkup(keyboardMarkup));
     }
 
-    private void getRandomJoke(long chatId) {
+    void getRandomJoke(long chatId) {
         List<Jokes> jokes = jokesService.allJokes();
 
         if (jokes != null && !jokes.isEmpty()) {
