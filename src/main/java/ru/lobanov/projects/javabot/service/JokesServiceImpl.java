@@ -1,17 +1,20 @@
 package ru.lobanov.projects.javabot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.stereotype.Service;
 import ru.lobanov.projects.javabot.model.Jokes;
 import ru.lobanov.projects.javabot.repository.JokesRepository;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@SpringBootConfiguration
 public class JokesServiceImpl implements JokesService{
     private final JokesRepository jokesRepository;
 
@@ -32,8 +35,8 @@ public class JokesServiceImpl implements JokesService{
     @Override
     public Optional<Jokes> addNewJoke(Jokes newJoke) {
         try {
-            newJoke.setTimeCreated(LocalDate.now());
-            newJoke.setTimeUpdated(LocalDate.now());
+            newJoke.setTimeCreated(new Date());
+            newJoke.setTimeUpdated(new Date());
 
             Jokes savedJoke = jokesRepository.save(newJoke);
 
@@ -50,7 +53,7 @@ public class JokesServiceImpl implements JokesService{
         if (existingJoke.isPresent()) {
             Jokes jokeToUpdate = existingJoke.get();
             jokeToUpdate.setShutka(updatedJoke.getShutka());
-            jokeToUpdate.setTimeUpdated(LocalDate.now());
+            jokeToUpdate.setTimeUpdated(new Date());
 
             return Optional.of(jokesRepository.save(jokeToUpdate));
         } else {
