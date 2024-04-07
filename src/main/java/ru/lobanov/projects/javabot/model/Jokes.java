@@ -1,11 +1,6 @@
 package ru.lobanov.projects.javabot.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -23,7 +18,7 @@ public class Jokes {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @SequenceGenerator(name = "jokes_id_seq", sequenceName = "jokes_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "shutka")

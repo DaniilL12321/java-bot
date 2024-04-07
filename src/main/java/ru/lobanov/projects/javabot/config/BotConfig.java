@@ -11,17 +11,26 @@ import org.springframework.context.ApplicationContext;
 import ru.lobanov.projects.javabot.JavaBotApplication;
 import ru.lobanov.projects.javabot.model.Jokes;
 
+import ru.lobanov.projects.javabot.model.Users;
+import ru.lobanov.projects.javabot.repository.JokesRepository;
+import ru.lobanov.projects.javabot.repository.UsersRepository;
 import ru.lobanov.projects.javabot.service.JokesService;
+import ru.lobanov.projects.javabot.service.UsersService;
 
+import java.util.Date;
 import java.util.List;
 
 public class BotConfig {
     private final TelegramBot bot;
     private final JokesService jokesService;
+    private final UsersService usersService;
+    private final UsersRepository usersRepository;
 
-    public BotConfig(String botToken, JokesService jokesService) {
+    public BotConfig(String botToken, JokesService jokesService, UsersService usersService, UsersRepository usersRepository) {
         this.bot = new TelegramBot(botToken);
         this.jokesService = jokesService;
+        this.usersService = usersService;
+        this.usersRepository = usersRepository;
 
         bot.setUpdatesListener(updates -> {
             for (Update update : updates) {
@@ -57,9 +66,8 @@ public class BotConfig {
     void getRandomJoke(long chatId) {
         List<Jokes> jokes = jokesService.allJokes();
 
+        int randomIndex = (int) (Math.random() * jokes.size());
         if (jokes != null && !jokes.isEmpty()) {
-            // Выбираем случайную шутку из списка всех шуток
-            int randomIndex = (int) (Math.random() * jokes.size());
             Jokes randomJoke = jokes.get(randomIndex);
 
             String jokeText = String.format("%s", randomJoke.getShutka());
@@ -68,11 +76,24 @@ public class BotConfig {
         } else {
             sendMessage(chatId, "Шуток не найдено, попробуйте другой запрос");
         }
+        Users user = new Users();
+        user.setUserId(chatId);
+        user.setTimeWatched(new Date());
+        user.setJokesId(randomIndex + 1);
+        usersRepository.save(user);
     }
 
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(JavaBotApplication.class, args);
         JokesService jokesService = context.getBean(JokesService.class);
-        new BotConfig(System.getenv("TOKEN"), jokesService);
+        UsersService usersService = context.getBean(UsersService.class);
+        UsersRepository usersRepository = context.getBean(UsersRepository.class);
+        BotConfig botConfig = new BotConfig(System.getenv("TOKEN"), jokesService, usersService, usersRepository);
+
+//        long specificUserId = 1019481069;
+//        for (int i = 0; i < 1000; i++) {
+//            botConfig.getRandomJoke(specificUserId);
+//            System.out.println("Joke sent to user with id " + specificUserId);
+//        }
     }
 }

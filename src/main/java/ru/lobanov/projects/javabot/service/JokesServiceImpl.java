@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.stereotype.Service;
 import ru.lobanov.projects.javabot.model.Jokes;
+import ru.lobanov.projects.javabot.model.Users;
 import ru.lobanov.projects.javabot.repository.JokesRepository;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -60,6 +60,7 @@ public class JokesServiceImpl implements JokesService{
             return Optional.empty();
         }
     }
+
     public boolean existsJokesById(Long id) {
         return jokesRepository.existsById(id);
     }
