@@ -29,12 +29,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<AbstractMap.SimpleEntry<Jokes, Long>> topFiveJokes() {
+    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes(int number) {
         return usersRepository.findAll().stream()
                 .collect(Collectors.groupingBy(Users::getJokesId, Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Map.Entry.<Long, Long>comparingByValue().reversed())
-                .limit(5)
+                .limit(number)
                 .map(entry -> new AbstractMap.SimpleEntry<>(
                         jokesRepository.findById(entry.getKey()).orElse(null), entry.getValue()))
                 .collect(Collectors.toList()).reversed();

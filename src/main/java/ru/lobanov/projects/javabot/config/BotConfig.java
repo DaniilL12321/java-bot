@@ -2,6 +2,7 @@ package ru.lobanov.projects.javabot.config;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -12,7 +13,6 @@ import ru.lobanov.projects.javabot.JavaBotApplication;
 import ru.lobanov.projects.javabot.model.Jokes;
 
 import ru.lobanov.projects.javabot.model.Users;
-import ru.lobanov.projects.javabot.repository.JokesRepository;
 import ru.lobanov.projects.javabot.repository.UsersRepository;
 import ru.lobanov.projects.javabot.service.JokesService;
 import ru.lobanov.projects.javabot.service.UsersService;
@@ -34,13 +34,20 @@ public class BotConfig {
 
         bot.setUpdatesListener(updates -> {
             for (Update update : updates) {
-                long chatId = update.message().chat().id();
-                String command = update.message().text();
+                Message message = update.message();
+                if (message != null) {
+                    long chatId = message.chat().id();
+                    String command = message.text();
 
-                if (command.startsWith("Получить шутку")) {
-                    getRandomJoke(chatId);
-                } else {
-                    sendMessage(chatId, "Неизвестная команда");
+                    if (command.startsWith("/start")) {
+                        sendMessage(chatId, "Привет! Я бот, который умеет рассказывать шутки. Нажми на кнопку, чтобы получить шутку.");
+                    }
+                    if (command.startsWith("Получить шутку")) {
+                        getRandomJoke(chatId);
+                    }
+                    else {
+                        sendMessage(chatId, "Неизвестная команда");
+                    }
                 }
             }
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
@@ -48,18 +55,13 @@ public class BotConfig {
     }
 
     private void sendMessage(long chatId, String message) {
-        bot.execute(new SendMessage(chatId, message));
-        sendMainMenu(chatId);
-    }
-
-    private void sendMainMenu(long chatId) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(
                 new KeyboardButton[]{new KeyboardButton("Получить шутку")}
         )
                 .oneTimeKeyboard(true)
                 .resizeKeyboard(true);
 
-        bot.execute(new SendMessage(chatId, "Выберите команду:")
+        bot.execute(new SendMessage(chatId, message)
                 .replyMarkup(keyboardMarkup));
     }
 
@@ -74,7 +76,7 @@ public class BotConfig {
 
             sendMessage(chatId, jokeText);
         } else {
-            sendMessage(chatId, "Шуток не найдено, попробуйте другой запрос");
+            sendMessage(chatId, "Шуток не найдено");
         }
         Users user = new Users();
         user.setUserId(chatId);

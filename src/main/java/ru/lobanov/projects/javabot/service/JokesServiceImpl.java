@@ -61,6 +61,13 @@ public class JokesServiceImpl implements JokesService{
         }
     }
 
+    // Полноценный рандом анекдотов со случайным выбором через БД
+    public Jokes getRandomJoke() {
+        List<Jokes> jokes = allJokes();
+        int randomIndex = (int) (Math.random() * jokes.size());
+        return jokes.get(randomIndex);
+    }
+
     public boolean existsJokesById(Long id) {
         return jokesRepository.existsById(id);
     }
