@@ -62,9 +62,10 @@ public class JokesServiceImpl implements JokesService{
         }
     }
 
+    // полноценный рандом с БД
     public Jokes getRandomJoke() {
         int page = 0;
-        int size = 11; // все шутки из БД
+        int size = (int) jokesRepository.count(); // все шутки из БД
         List<Jokes> jokes = allJokes(PageRequest.of(page, size));
 
         if (jokes != null && !jokes.isEmpty()) {

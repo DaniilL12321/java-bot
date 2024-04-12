@@ -23,7 +23,7 @@ public class JokesController {
     @GetMapping
     public List<Jokes> allJokes(
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size
+            @RequestParam(required = false, defaultValue = "11") int size
             ) {
         return service.allJokes(PageRequest.of(page, size));
     }
