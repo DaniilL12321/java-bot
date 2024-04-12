@@ -2,12 +2,12 @@ package ru.lobanov.projects.javabot.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.lobanov.projects.javabot.model.Jokes;
-import ru.lobanov.projects.javabot.model.Users;
 import ru.lobanov.projects.javabot.repository.JokesRepository;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,14 +18,14 @@ import java.util.Optional;
 public class JokesServiceImpl implements JokesService{
     private final JokesRepository jokesRepository;
 
-    LocalDate currentDate = LocalDate.now();
     // Вывод всех шуток
     @Override
-    public List<Jokes> allJokes() {
-        List<Jokes> jokesList = jokesRepository.findAll();
+    public List<Jokes> allJokes(PageRequest pageRequest) {
+        Page<Jokes> page = jokesRepository.findAll(pageRequest);
 
-        return jokesList;
+        return page.getContent();
     }
+
     // Вывод шутки и информации о ней по ID
     public Optional<Jokes> getJokesById(Long id) {
         return jokesRepository.findById(id);
@@ -46,6 +46,7 @@ public class JokesServiceImpl implements JokesService{
             return Optional.empty();
         }
     }
+
     // Изменение шутки
     public Optional<Jokes> updateJoke(Long id, Jokes updatedJoke) {
         Optional<Jokes> existingJoke = jokesRepository.findById(id);
@@ -61,16 +62,23 @@ public class JokesServiceImpl implements JokesService{
         }
     }
 
-    // Полноценный рандом анекдотов со случайным выбором через БД
     public Jokes getRandomJoke() {
-        List<Jokes> jokes = allJokes();
-        int randomIndex = (int) (Math.random() * jokes.size());
-        return jokes.get(randomIndex);
+        int page = 0;
+        int size = 11; // все шутки из БД
+        List<Jokes> jokes = allJokes(PageRequest.of(page, size));
+
+        if (jokes != null && !jokes.isEmpty()) {
+            int randomIndex = (int) (Math.random() * jokes.size());
+            return jokes.get(randomIndex);
+        } else {
+            return null;
+        }
     }
 
     public boolean existsJokesById(Long id) {
         return jokesRepository.existsById(id);
     }
+
     public void deleteJokesById(Long id) {
         jokesRepository.deleteById(id);
     }

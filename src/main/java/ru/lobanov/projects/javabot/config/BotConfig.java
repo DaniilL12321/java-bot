@@ -9,6 +9,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.model.Update;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.PageRequest;
 import ru.lobanov.projects.javabot.JavaBotApplication;
 import ru.lobanov.projects.javabot.model.Jokes;
 
@@ -43,7 +44,20 @@ public class BotConfig {
                         sendMessage(chatId, "Привет! Я бот, который умеет рассказывать шутки. Нажми на кнопку, чтобы получить шутку.");
                     }
                     if (command.startsWith("Получить шутку")) {
-                        getRandomJoke(chatId);
+                        Jokes randomJoke = jokesService.getRandomJoke();
+
+                        if (randomJoke != null) {
+                            String jokeText = String.format("%s", randomJoke.getShutka());
+                            sendMessage(chatId, jokeText);
+
+                            Users user = new Users();
+                            user.setUserId(chatId);
+                            user.setTimeWatched(new Date());
+                            user.setJokesId(randomJoke.getId());
+                            usersRepository.save(user);
+                        } else {
+                            sendMessage(chatId, "Шуток не найдено");
+                        }
                     }
                     else {
                         sendMessage(chatId, "Неизвестная команда");
@@ -63,26 +77,6 @@ public class BotConfig {
 
         bot.execute(new SendMessage(chatId, message)
                 .replyMarkup(keyboardMarkup));
-    }
-
-    void getRandomJoke(long chatId) {
-        List<Jokes> jokes = jokesService.allJokes();
-
-        int randomIndex = (int) (Math.random() * jokes.size());
-        if (jokes != null && !jokes.isEmpty()) {
-            Jokes randomJoke = jokes.get(randomIndex);
-
-            String jokeText = String.format("%s", randomJoke.getShutka());
-
-            sendMessage(chatId, jokeText);
-        } else {
-            sendMessage(chatId, "Шуток не найдено");
-        }
-        Users user = new Users();
-        user.setUserId(chatId);
-        user.setTimeWatched(new Date());
-        user.setJokesId(randomIndex + 1);
-        usersRepository.save(user);
     }
 
     public static void main(String[] args) {

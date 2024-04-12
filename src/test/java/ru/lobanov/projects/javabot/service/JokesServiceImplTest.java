@@ -41,7 +41,7 @@ class JokesServiceImplTest {
                 .build();
 
         Mockito.when(jokesRepository.findAll()).thenReturn(List.of(joke1, joke2));
-        assertEquals(2, jokesService.allJokes().size());
+        assertEquals(2, jokesService.allJokes(PageRequest.of(page, size)).size());
     }
 
     @Test

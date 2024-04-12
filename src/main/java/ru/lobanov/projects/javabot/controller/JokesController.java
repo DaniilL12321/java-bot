@@ -1,6 +1,7 @@
 package ru.lobanov.projects.javabot.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,11 @@ public class JokesController {
 
     // GET /jokes - выдача всех шуток
     @GetMapping
-    public List<Jokes> allJokes() {
-        return service.allJokes();
+    public List<Jokes> allJokes(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size
+            ) {
+        return service.allJokes(PageRequest.of(page, size));
     }
 
     // GET /jokes/id - выдача шутки с определенном ID

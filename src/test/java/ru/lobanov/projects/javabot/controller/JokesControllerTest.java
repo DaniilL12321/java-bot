@@ -59,7 +59,7 @@ class JokesControllerTest {
     @Test
     void allJokes() throws Exception {
         Jokes savedJoke = new Jokes(1L, "Joke text", new Date(), new Date());
-        Mockito.when(jokesService.allJokes()).thenReturn(Collections.singletonList(savedJoke));
+        Mockito.when(jokesService.allJokes(PageRequest.of(page, size))).thenReturn(Collections.singletonList(savedJoke));
 
         String response = mockMvc.perform(
                         MockMvcRequestBuilders.get("/jokes")
