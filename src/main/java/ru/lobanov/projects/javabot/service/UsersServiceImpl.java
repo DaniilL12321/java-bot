@@ -1,6 +1,7 @@
 package ru.lobanov.projects.javabot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.stereotype.Service;
 import ru.lobanov.projects.javabot.model.Jokes;
@@ -17,7 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @SpringBootConfiguration
 public class UsersServiceImpl implements UsersService {
+    @Autowired
     private final UsersRepository usersRepository;
+    @Autowired
     private final JokesRepository jokesRepository;
 
 
@@ -28,12 +31,12 @@ public class UsersServiceImpl implements UsersService {
         return usersList;
     }
 
-    @Override
     public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes(int number) {
         return usersRepository.findAll().stream()
                 .collect(Collectors.groupingBy(Users::getJokesId, Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Map.Entry.<Long, Long>comparingByValue().reversed())
+                .limit(5)
                 .limit(number)
                 .map(entry -> new AbstractMap.SimpleEntry<>(
                         jokesRepository.findById(entry.getKey()).orElse(null), entry.getValue()))

@@ -1,10 +1,13 @@
 package ru.lobanov.projects.javabot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,4 +32,8 @@ public class Jokes {
 
     @Column(name = "time_updated")
     private Date timeUpdated;
+
+    @OneToMany(mappedBy = "jokes", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Users> users = new ArrayList<>();
 }

@@ -27,4 +27,8 @@ public class Users {
 
     @Column(name = "jokes_id")
     private long jokesId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jokes_id", insertable = false, updatable = false)
+    private Jokes jokes;
 }

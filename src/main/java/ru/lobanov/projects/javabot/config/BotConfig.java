@@ -79,6 +79,23 @@ public class BotConfig {
                 .replyMarkup(keyboardMarkup));
     }
 
+//    public void getRandomJoke(long userId) {
+//        Jokes randomJoke = jokesService.getRandomJoke();
+//
+//        if (randomJoke != null) {
+//            String jokeText = String.format("%s", randomJoke.getShutka());
+//            sendMessage(userId, jokeText);
+//
+//            Users user = new Users();
+//            user.setUserId(userId);
+//            user.setTimeWatched(new Date());
+//            user.setJokesId(randomJoke.getId());
+//            usersRepository.save(user);
+//        } else {
+//            sendMessage(userId, "Шуток не найдено");
+//        }
+//    }
+
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(JavaBotApplication.class, args);
         JokesService jokesService = context.getBean(JokesService.class);
