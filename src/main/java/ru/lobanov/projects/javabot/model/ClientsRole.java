@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientsRole {
-
     @Id
     @GeneratedValue(generator = "clients_role_id_seq", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "clients_role_id_seq", sequenceName = "clients_role_id_seq", allocationSize = 1)

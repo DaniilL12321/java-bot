@@ -12,7 +12,6 @@ import ru.lobanov.projects.javabot.service.ClientsService;
 @RestController
 @RequestMapping("/registration")
 public class RegistrationController {
-
     private final ClientsService clientsService;
 
     @PostMapping
@@ -23,5 +22,4 @@ public class RegistrationController {
         clientsService.registration(username, password);
         return ResponseEntity.ok().build();
     }
-
 }

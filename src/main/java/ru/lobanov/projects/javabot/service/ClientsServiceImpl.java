@@ -2,11 +2,9 @@ package ru.lobanov.projects.javabot.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import ru.lobanov.projects.javabot.repository.ClientsRolesRepository;
 @RequiredArgsConstructor
 @Service
 public class ClientsServiceImpl implements ClientsService, UserDetailsService {
-
     private final ClientsRolesRepository clientsRolesRepository;
     private final ClientsRepository clientsRepository;
     private final PasswordEncoder passwordEncoder;
@@ -37,7 +34,7 @@ public class ClientsServiceImpl implements ClientsService, UserDetailsService {
                             .setExpired(false)
                             .setEnabled(true)
             );
-            clientsRolesRepository.save(new ClientsRole(null, ClientsAuthority.PLACE_JOKES, user));
+            clientsRolesRepository.save(new ClientsRole(null, ClientsAuthority.VIEW_JOKES, user));
         }
         else {
             throw new UsernameAlreadyExistsException();
