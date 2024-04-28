@@ -15,6 +15,8 @@ import ru.lobanov.projects.javabot.model.ClientsRole;
 import ru.lobanov.projects.javabot.repository.ClientsRepository;
 import ru.lobanov.projects.javabot.repository.ClientsRolesRepository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ClientsServiceImpl implements ClientsService, UserDetailsService {
@@ -44,5 +46,26 @@ public class ClientsServiceImpl implements ClientsService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return clientsRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    // Все роли клиентов
+    @Override
+    public List<ClientsRole> getClientsRoles() {
+        return (List<ClientsRole>) clientsRolesRepository.findAll();
+    }
+
+    @Override
+    public List<ClientsRole> getClientRoles(Long clientId) {
+        Clients client = clientsRepository.findById(clientId)
+                .orElseThrow(() -> new UsernameNotFoundException("Client not found"));
+        return client.getClientsRoles();
+    }
+
+    @Override
+    public void updateClientRoles(Long clientId, List<ClientsRole> newRoles) {
+        Clients client = clientsRepository.findById(clientId)
+                .orElseThrow(() -> new UsernameNotFoundException("Client not found"));
+        client.setClientsRoles(newRoles);
+        clientsRepository.save(client);
     }
 }

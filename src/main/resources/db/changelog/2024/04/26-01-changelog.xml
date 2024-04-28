@@ -11,33 +11,33 @@
     <changeSet id="1714111334626-2" author="daniil (generated)">
         <createSequence incrementBy="1" sequenceName="clients_role_id_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="1714111334626-3" author="daniil (generated)">
-        <createTable tableName="clients">
-            <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_clients"/>
-            </column>
-            <column name="username" type="VARCHAR(255)"/>
-            <column name="password" type="VARCHAR(255)"/>
-            <column name="expired" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="locked" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="enabled" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet id="1714111334626-4" author="daniil (generated)">
-        <createTable tableName="clients_roles">
-            <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_clients_roles"/>
-            </column>
-            <column name="clients_authority" type="SMALLINT"/>
-            <column name="clients_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
+<!--    <changeSet id="1714111334626-3" author="daniil (generated)">-->
+<!--        <createTable tableName="clients">-->
+<!--            <column name="id" type="BIGINT">-->
+<!--                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_clients"/>-->
+<!--            </column>-->
+<!--            <column name="username" type="VARCHAR(255)"/>-->
+<!--            <column name="password" type="VARCHAR(255)"/>-->
+<!--            <column name="expired" type="BOOLEAN">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="locked" type="BOOLEAN">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="enabled" type="BOOLEAN">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+<!--    <changeSet id="1714111334626-4" author="daniil (generated)">-->
+<!--        <createTable tableName="clients_roles">-->
+<!--            <column name="id" type="BIGINT">-->
+<!--                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_clients_roles"/>-->
+<!--            </column>-->
+<!--            <column name="clients_authority" type="SMALLINT"/>-->
+<!--            <column name="clients_id" type="BIGINT"/>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
 <!--    <changeSet id="1714111334626-5" author="daniil (generated)">-->
 <!--        <createTable tableName="jokes">-->
 <!--            <column autoIncrement="true" name="id" type="BIGINT">-->
