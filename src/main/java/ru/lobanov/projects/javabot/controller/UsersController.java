@@ -20,8 +20,8 @@ public class UsersController {
         return usersService.allUsers();
     }
 
-    @GetMapping("/top/{number}")
-    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes(@PathVariable int number) {
-        return usersService.topJokes(number);
+    @GetMapping("/top")
+    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes() {
+        return usersService.topJokes();
     }
 }

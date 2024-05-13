@@ -25,8 +25,8 @@ public class ClientsRolesController {
         return clientsService.getClientRoles(clientId);
     }
 
-    @PutMapping
-    public void updateClientRoles(@RequestParam Long clientId, @RequestBody List<ClientsRole> newRoles) {
+    @PutMapping("/{clientId}")
+    public void updateClientRoles(@PathVariable Long clientId, @RequestBody List<ClientsRole> newRoles) {
         clientsService.updateClientRoles(clientId, newRoles);
     }
 }

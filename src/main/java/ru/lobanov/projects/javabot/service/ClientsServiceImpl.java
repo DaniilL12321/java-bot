@@ -61,11 +61,13 @@ public class ClientsServiceImpl implements ClientsService, UserDetailsService {
         return client.getClientsRoles();
     }
 
+    // изменение роли клиента в clientsRolesRepository
     @Override
     public void updateClientRoles(Long clientId, List<ClientsRole> newRoles) {
         Clients client = clientsRepository.findById(clientId)
                 .orElseThrow(() -> new UsernameNotFoundException("Client not found"));
-        client.setClientsRoles(newRoles);
-        clientsRepository.save(client);
+        clientsRolesRepository.deleteAll(client.getClientsRoles());
+        newRoles.forEach(role -> role.setClients(client));
+        clientsRolesRepository.saveAll(newRoles);
     }
 }

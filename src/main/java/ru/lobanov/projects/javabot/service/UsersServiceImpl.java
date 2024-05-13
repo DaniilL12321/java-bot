@@ -31,15 +31,11 @@ public class UsersServiceImpl implements UsersService {
         return usersList;
     }
 
-    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes(int number) {
-        return usersRepository.findAll().stream()
-                .collect(Collectors.groupingBy(Users::getJokesId, Collectors.counting()))
-                .entrySet().stream()
-                .sorted(Map.Entry.<Long, Long>comparingByValue().reversed())
-                .limit(5)
-                .limit(number)
-                .map(entry -> new AbstractMap.SimpleEntry<>(
-                        jokesRepository.findById(entry.getKey()).orElse(null), entry.getValue()))
-                .collect(Collectors.toList()).reversed();
+    // топ шуток
+    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes() {
+        return usersRepository.findTopJokes().stream()
+                .map(obj -> new AbstractMap.SimpleEntry<>(
+                        new Jokes((String) obj[0]), ((Number) obj[1]).longValue()))
+                .collect(Collectors.toList());
     }
 }

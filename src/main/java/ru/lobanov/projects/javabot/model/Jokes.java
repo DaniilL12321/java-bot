@@ -36,4 +36,8 @@ public class Jokes {
     @OneToMany(mappedBy = "jokes", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Users> users = new ArrayList<>();
+
+    public Jokes(String shutka) {
+        this.shutka = shutka;
+    }
 }

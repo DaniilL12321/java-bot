@@ -12,5 +12,5 @@ public interface UsersService {
     // Вывод всех пользователей
     List<Users> allUsers();
 
-    List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes(int number);
+    List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes();
 }
