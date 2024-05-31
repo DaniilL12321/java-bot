@@ -19,9 +19,4 @@ public class UsersController {
     public List<Users> allUsers() {
         return usersService.allUsers();
     }
-
-    @GetMapping("/top")
-    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes() {
-        return usersService.topJokes();
-    }
 }

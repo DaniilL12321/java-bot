@@ -1,7 +1,7 @@
 package ru.lobanov.projects.javabot.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +25,7 @@ public class ClientsServiceImpl implements ClientsService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public void registration(String username, String password) {
         if (clientsRepository.findByUsername(username).isEmpty()) {
             Clients user = clientsRepository.save(

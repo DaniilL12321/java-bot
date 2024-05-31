@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import ru.lobanov.projects.javabot.model.Jokes;
 import ru.lobanov.projects.javabot.repository.JokesRepository;
 
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,16 +66,15 @@ public class JokesServiceImpl implements JokesService{
 
     // полноценный рандом с БД
     public Jokes getRandomJoke() {
-        int page = 0;
-        int size = (int) jokesRepository.count(); // все шутки из БД
-        List<Jokes> jokes = allJokes(PageRequest.of(page, size));
+        return jokesRepository.getRandomJoke();
+    }
 
-        if (jokes != null && !jokes.isEmpty()) {
-            int randomIndex = (int) (Math.random() * jokes.size());
-            return jokes.get(randomIndex);
-        } else {
-            return null;
-        }
+    // топ шуток
+    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes() {
+        return jokesRepository.findTopJokes().stream()
+                .map(obj -> new AbstractMap.SimpleEntry<>(
+                        new Jokes((String) obj[0]), ((Number) obj[1]).longValue()))
+                .collect(Collectors.toList());
     }
 
     public boolean existsJokesById(Long id) {

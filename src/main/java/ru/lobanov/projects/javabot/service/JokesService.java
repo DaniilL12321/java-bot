@@ -3,6 +3,7 @@ package ru.lobanov.projects.javabot.service;
 import org.springframework.data.domain.PageRequest;
 import ru.lobanov.projects.javabot.model.Jokes;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,5 @@ public interface JokesService {
     Optional<Jokes> addNewJoke(Jokes newJoke);
     Optional<Jokes> updateJoke(Long id, Jokes updatedJoke);
     Jokes getRandomJoke();
+    List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes();
 }

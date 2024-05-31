@@ -9,7 +9,6 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.model.Update;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.PageRequest;
 import ru.lobanov.projects.javabot.JavaBotApplication;
 import ru.lobanov.projects.javabot.model.Jokes;
 
@@ -19,7 +18,6 @@ import ru.lobanov.projects.javabot.service.JokesService;
 import ru.lobanov.projects.javabot.service.UsersService;
 
 import java.util.Date;
-import java.util.List;
 
 public class BotConfig {
     private final TelegramBot bot;

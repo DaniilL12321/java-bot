@@ -6,10 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.lobanov.projects.javabot.model.Jokes;
-import ru.lobanov.projects.javabot.model.Users;
 import ru.lobanov.projects.javabot.service.JokesService;
-import ru.lobanov.projects.javabot.service.UsersService;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class JokesController {
     @GetMapping
     public List<Jokes> allJokes(
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "11") int size
+            @RequestParam(required = false, defaultValue = "100") int size
             ) {
         return service.allJokes(PageRequest.of(page, size));
     }
@@ -59,5 +58,10 @@ public class JokesController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/top")
+    public List<AbstractMap.SimpleEntry<Jokes, Long>> topJokes() {
+        return service.topJokes();
     }
 }
